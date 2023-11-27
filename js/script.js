@@ -1,6 +1,7 @@
-var hide = true;
+var putOut = false;
+var volume  = 0;
 circle.addEventListener("click", function() {
-  if (hide) {
+  if (putOut) {
     circle.style.background = "darkorange";
     circle.style.color = "orange";
     info.style.width = "640px";
@@ -11,7 +12,8 @@ circle.addEventListener("click", function() {
     info.style.width = "62px";
     info.style.height = "62px";
   }
-  hide = !hide;
+  putOut = !putOut;
+  volume  = clock.getDelta();
 }, false);
 
 var scene = new THREE.Scene();
@@ -158,17 +160,25 @@ var time = 0;
 render();
 function render(){
   requestAnimationFrame(render);
-
-  var volumeMeter = document.getElementById('volumeMeter');
-  var volume  = clock.getDelta();
-  if (volumeMeter && volumeMeter.innerText){
-    volume= parseFloat(volumeMeter.innerText);
-  }  
-  if (volume > 15) {
-    volume = NaN;
+  if(!putOut)
+  {
+    var volumeMeter = document.getElementById('volumeMeter');  
+    if (volumeMeter && volumeMeter.innerText ){
+      if(volume!==NaN){
+        volume= parseFloat(volumeMeter.innerText);
+      }    
+    }  
+    if (volume > 20 ) {
+      volume = NaN;
+      putOut = true;
+    }
+    console.log(volume);
+    time =  volume;
   }
-  // console.log(volume);
-  time =  volume;
+  else{
+    time = NaN;
+  }
+
   // console.log(time);
   flameMaterials[0].uniforms.time.value = time;
   flameMaterials[1].uniforms.time.value = time;
