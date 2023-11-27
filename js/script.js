@@ -173,7 +173,7 @@ function render(){
       putOut = true;
     }
     console.log(volume);
-    time =  volume;
+    time = clock.getDelta()+ volume;
   }
   else{
     time = NaN;
